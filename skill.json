@@ -1,0 +1,59 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:YOUR_ACCOUNT_ID:function:AlexaHuggingFacePapers"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [],
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "locales": {
+        "pt-BR": {
+          "privacyPolicyUrl": "",
+          "termsOfUseUrl": ""
+        }
+      },
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "usesPersonalInfo": false
+    },
+    "publishingInformation": {
+      "locales": {
+        "pt-BR": {
+          "summary": "Resumo dos artigos mais recentes de Machine Learning do Hugging Face em português brasileiro.",
+          "examplePhrases": [
+            "Alexa, abrir resumo hugging face",
+            "Alexa, pedir para resumo hugging face resumir artigos",
+            "Alexa, perguntar para resumo hugging face quais são as novidades"
+          ],
+          "keywords": [
+            "hugging face",
+            "machine learning",
+            "inteligência artificial",
+            "artigos",
+            "papers",
+            "IA",
+            "deep learning",
+            "resumo"
+          ],
+          "name": "Resumo Hugging Face",
+          "description": "Esta skill busca os artigos científicos mais recentes do Hugging Face Hub e gera um resumo em português brasileiro usando inteligência artificial. Perfeita para quem quer se manter atualizado sobre as últimas pesquisas em Machine Learning, Deep Learning e Inteligência Artificial de forma rápida e acessível.",
+          "smallIconUri": "https://example.com/icon_108.png",
+          "largeIconUri": "https://example.com/icon_512.png"
+        }
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "1. Abra a skill dizendo 'Alexa, abrir resumo hugging face'\n2. Peça para resumir artigos dizendo 'resumir artigos'\n3. Pergunte sobre novidades dizendo 'quais são as novidades'\n4. Peça artigos sobre um tema específico dizendo 'artigos sobre visão computacional'",
+      "category": "EDUCATION_AND_REFERENCE",
+      "distributionCountries": [
+        "BR"
+      ]
+    }
+  }
+}
