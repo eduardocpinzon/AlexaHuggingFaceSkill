@@ -108,13 +108,13 @@ def call_llm(prompt: str) -> str:
         response = llm.invoke([message])
         return response.content
     except Exception as e:
-        logger.error(f"LangChain Claude error: {e}")
+        logger.error(f"LangChain OpenAI error: {e}")
         return "Desculpe, tive um problema ao gerar o resumo."
 
 
-def summarize_papers_with_claude(papers: list) -> str:
+def summarize_papers_with_llm(papers: list) -> str:
     """
-    Use Claude Sonnet via LangChain to summarize papers in Brazilian Portuguese.
+    Use GPT-4o via LangChain to summarize papers in Brazilian Portuguese.
     """
     if not papers:
         return "Não encontrei artigos recentes para resumir. Tente novamente mais tarde."
@@ -143,9 +143,9 @@ Gere um resumo natural e fluido em português brasileiro."""
     return call_llm(prompt)
 
 
-def get_paper_details_with_claude(paper: dict, paper_number: int) -> str:
+def get_paper_details_with_llm(paper: dict, paper_number: int) -> str:
     """
-    Use Claude Sonnet via LangChain to provide detailed explanation of a specific paper.
+    Use GPT-4o via LangChain to provide detailed explanation of a specific paper.
     """
     authors = ", ".join(paper["authors"])
 
@@ -215,7 +215,7 @@ class GetPapersSummaryIntentHandler(AbstractRequestHandler):
         session_attr = handler_input.attributes_manager.session_attributes
         session_attr["papers"] = papers
 
-        speak_output = summarize_papers_with_claude(papers)
+        speak_output = summarize_papers_with_llm(papers)
 
         return (
             handler_input.response_builder
@@ -248,7 +248,7 @@ class GetLatestNewsIntentHandler(AbstractRequestHandler):
         session_attr = handler_input.attributes_manager.session_attributes
         session_attr["papers"] = papers
 
-        speak_output = summarize_papers_with_claude(papers)
+        speak_output = summarize_papers_with_llm(papers)
 
         return (
             handler_input.response_builder
@@ -304,7 +304,7 @@ class GetPaperDetailsIntentHandler(AbstractRequestHandler):
 
         # Get the specific paper
         paper = papers[paper_number - 1]
-        speak_output = get_paper_details_with_claude(paper, paper_number)
+        speak_output = get_paper_details_with_llm(paper, paper_number)
 
         return (
             handler_input.response_builder
