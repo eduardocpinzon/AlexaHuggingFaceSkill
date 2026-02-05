@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Alexa Skill: Hugging Face Papers Summary (Alexa-Hosted Version with LangChain)
+Alexa Skill: Hugging Face Papers Summary (Alexa-Hosted Version)
 Fetches latest ML papers from Hugging Face and summarizes in Brazilian Portuguese
-using ChatGPT (GPT-4o) via LangChain.
+using ChatGPT (GPT-4o) via direct OpenAI API calls.
 
 Para usar no Alexa Developer Console (Alexa-hosted):
 1. Crie uma skill Alexa-hosted (Python)
@@ -27,25 +27,12 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model import Response
 
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Environment variable - configure in Alexa Developer Console
 # Settings > Environment Variables > Add OPENAI_API_KEY
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-
-# Initialize LangChain OpenAI model
-llm = None
-if OPENAI_API_KEY:
-    llm = ChatOpenAI(
-        model="gpt-4o",
-        api_key=OPENAI_API_KEY,
-        max_tokens=1024,
-        timeout=25,
-    )
 
 # Mapeamento de números por extenso para dígitos
 NUMERO_MAP = {
@@ -98,23 +85,39 @@ def fetch_huggingface_papers(limit: int = 5) -> list:
 
 def call_llm(prompt: str) -> str:
     """
-    Call ChatGPT via LangChain.
+    Call ChatGPT via direct HTTP request to OpenAI API.
     """
-    if not llm:
+    if not OPENAI_API_KEY:
         return "Erro: A chave da API do OpenAI não está configurada. Configure a variável OPENAI_API_KEY nas configurações da skill."
 
     try:
-        message = HumanMessage(content=prompt)
-        response = llm.invoke([message])
-        return response.content
+        payload = json.dumps({
+            "model": "gpt-4o",
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 1024,
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+            },
+        )
+
+        with urllib.request.urlopen(req, timeout=25) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        return result["choices"][0]["message"]["content"]
     except Exception as e:
-        logger.error(f"LangChain OpenAI error: {e}")
+        logger.error(f"OpenAI API error: {e}")
         return "Desculpe, tive um problema ao gerar o resumo."
 
 
 def summarize_papers_with_llm(papers: list) -> str:
     """
-    Use GPT-4o via LangChain to summarize papers in Brazilian Portuguese.
+    Use GPT-4o to summarize papers in Brazilian Portuguese.
     """
     if not papers:
         return "Não encontrei artigos recentes para resumir. Tente novamente mais tarde."
@@ -145,7 +148,7 @@ Gere um resumo natural e fluido em português brasileiro."""
 
 def get_paper_details_with_llm(paper: dict, paper_number: int) -> str:
     """
-    Use GPT-4o via LangChain to provide detailed explanation of a specific paper.
+    Use GPT-4o to provide detailed explanation of a specific paper.
     """
     authors = ", ".join(paper["authors"])
 
