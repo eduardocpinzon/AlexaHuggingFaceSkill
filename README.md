@@ -2,6 +2,8 @@
 
 Skill da Alexa que busca os artigos mais recentes do Hugging Face e resume em Portugues Brasileiro usando GPT-4o. Tudo roda no Alexa Developer Console, sem precisar de AWS.
 
+**Contato:** edcpinzon@gmail.com
+
 ## Como Funciona
 
 ```
@@ -97,4 +99,4 @@ Isso empacota o codigo e dependencias em `lambda_function.zip` para upload no AW
 
 ## Licenca
 
-Este projeto e disponibilizado como open source.
+Este projeto esta licenciado sob a [MIT License](LICENSE).
