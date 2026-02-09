@@ -41,15 +41,13 @@
           "slots": [
             {
               "name": "paperNumber",
-              "type": "AMAZON.NUMBER",
-              "samples": [
-                "{paperNumber}",
-                "número {paperNumber}",
-                "o {paperNumber}"
-              ]
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
+            "{paperNumber}",
+            "número {paperNumber}",
+            "o {paperNumber}",
             "detalhes do artigo {paperNumber}",
             "mais sobre o artigo {paperNumber}",
             "fala mais do {paperNumber}",
