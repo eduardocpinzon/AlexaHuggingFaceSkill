@@ -1,79 +1,97 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "resumo hugging face",
-      "intents": [
-        {"name": "AMAZON.CancelIntent", "samples": []},
-        {"name": "AMAZON.HelpIntent", "samples": []},
-        {"name": "AMAZON.StopIntent", "samples": []},
-        {"name": "AMAZON.NavigateHomeIntent", "samples": []},
-        {"name": "AMAZON.FallbackIntent", "samples": []},
-        {
-          "name": "GetPapersSummaryIntent",
-          "slots": [],
-          "samples": [
-            "resumir artigos",
-            "resumir papers",
-            "me conta sobre os artigos",
-            "quero saber dos artigos",
-            "artigos recentes",
-            "últimos artigos",
-            "últimos papers",
-            "buscar artigos",
-            "listar artigos"
-          ]
-        },
-        {
-          "name": "GetLatestNewsIntent",
-          "slots": [],
-          "samples": [
-            "quais são as novidades",
-            "o que há de novo",
-            "novidades",
-            "notícias",
-            "me atualiza",
-            "o que está em alta",
-            "destaques"
-          ]
-        },
-        {
-          "name": "GetPaperDetailsIntent",
-          "slots": [
-            {
-              "name": "paperNumber",
-              "type": "AMAZON.NUMBER"
-            }
-          ],
-          "samples": [
-            "{paperNumber}",
-            "número {paperNumber}",
-            "o {paperNumber}",
-            "detalhes do artigo {paperNumber}",
-            "mais sobre o artigo {paperNumber}",
-            "fala mais do {paperNumber}",
-            "explica o artigo {paperNumber}",
-            "quero saber mais do artigo {paperNumber}",
-            "me conta mais sobre o {paperNumber}",
-            "artigo {paperNumber}",
-            "paper {paperNumber}",
-            "o número {paperNumber}",
-            "detalhes do {paperNumber}",
-            "mais detalhes do {paperNumber}",
-            "fala do artigo {paperNumber}",
-            "sobre o artigo {paperNumber}",
-            "primeiro artigo",
-            "segundo artigo",
-            "terceiro artigo",
-            "quarto artigo",
-            "quinto artigo",
-            "o primeiro",
-            "o segundo",
-            "o terceiro",
-            "o quarto"
-          ]
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "resumo artigos",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "Sair",
+                        "Obrigado"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetPapersSummaryIntent",
+                    "slots": [],
+                    "samples": [
+                        "resumir artigos",
+                        "resumir papers",
+                        "me conta sobre os artigos",
+                        "quero saber dos artigos",
+                        "artigos recentes",
+                        "últimos artigos",
+                        "últimos papers",
+                        "buscar artigos",
+                        "listar artigos"
+                    ]
+                },
+                {
+                    "name": "GetLatestNewsIntent",
+                    "slots": [],
+                    "samples": [
+                        "quais são as novidades",
+                        "o que há de novo",
+                        "novidades",
+                        "notícias",
+                        "me atualiza",
+                        "o que está em alta",
+                        "destaques"
+                    ]
+                },
+                {
+                    "name": "GetPaperDetailsIntent",
+                    "slots": [
+                        {
+                            "name": "paperNumber",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{paperNumber}",
+                        "número {paperNumber}",
+                        "o {paperNumber}",
+                        "detalhes do artigo {paperNumber}",
+                        "mais sobre o artigo {paperNumber}",
+                        "fala mais do {paperNumber}",
+                        "explica o artigo {paperNumber}",
+                        "quero saber mais do artigo {paperNumber}",
+                        "me conta mais sobre o {paperNumber}",
+                        "artigo {paperNumber}",
+                        "paper {paperNumber}",
+                        "o número {paperNumber}",
+                        "detalhes do {paperNumber}",
+                        "mais detalhes do {paperNumber}",
+                        "fala do artigo {paperNumber}",
+                        "sobre o artigo {paperNumber}",
+                        "primeiro artigo",
+                        "segundo artigo",
+                        "terceiro artigo",
+                        "quarto artigo",
+                        "quinto artigo",
+                        "o primeiro",
+                        "o segundo",
+                        "o terceiro",
+                        "o quarto"
+                    ]
+                }
+            ],
+            "types": []
         }
-      ],
-      "types": []
     }
-  }
 }
