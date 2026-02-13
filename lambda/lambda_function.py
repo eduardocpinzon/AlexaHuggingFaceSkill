@@ -171,6 +171,121 @@ Gere uma explicação detalhada e natural em português brasileiro."""
     return call_llm(prompt)
 
 
+def get_practical_usage_with_llm(paper: dict, paper_number: int) -> str:
+    """
+    Use LLM to generate practical usage ideas for a specific paper.
+    """
+    authors = ", ".join(paper["authors"])
+
+    prompt = f"""Você é um assistente de voz da Alexa especializado em inteligência artificial.
+Com base no seguinte artigo científico, sugira ideias práticas de uso e aplicações reais da proposta apresentada.
+
+Título: {paper['title']}
+Autores: {authors}
+Resumo completo: {paper['summary']}
+
+REGRAS IMPORTANTES:
+- O texto será LIDO EM VOZ ALTA pela Alexa
+- Use no máximo 250 palavras
+- Sugira de 3 a 5 aplicações práticas e reais
+- Explique como empresas, desenvolvedores ou pesquisadores poderiam usar essa tecnologia
+- Dê exemplos concretos de setores ou problemas que poderiam se beneficiar
+- Use linguagem acessível e conversacional
+- Não use formatação como asteriscos ou marcadores
+- Comece dizendo "O artigo número {paper_number}, sobre {paper['title']}, pode ser aplicado de várias formas..." ou similar
+
+Gere sugestões práticas e criativas em português brasileiro."""
+
+    return call_llm(prompt)
+
+
+def compare_papers_with_llm(paper1: dict, num1: int, paper2: dict, num2: int) -> str:
+    """
+    Use LLM to compare two papers.
+    """
+    authors1 = ", ".join(paper1["authors"])
+    authors2 = ", ".join(paper2["authors"])
+
+    prompt = f"""Você é um assistente de voz da Alexa especializado em inteligência artificial.
+Compare os dois artigos científicos abaixo, destacando semelhanças, diferenças e como se complementam.
+
+Artigo {num1}: {paper1['title']}
+Autores: {authors1}
+Resumo: {paper1['summary'][:500]}
+
+Artigo {num2}: {paper2['title']}
+Autores: {authors2}
+Resumo: {paper2['summary'][:500]}
+
+REGRAS IMPORTANTES:
+- O texto será LIDO EM VOZ ALTA pela Alexa
+- Use no máximo 250 palavras
+- Compare os objetivos, métodos e contribuições de cada artigo
+- Destaque o que há em comum e o que difere
+- Mencione se os artigos se complementam
+- Use linguagem acessível e conversacional
+- Não use formatação como asteriscos ou marcadores
+
+Gere uma comparação natural e fluida em português brasileiro."""
+
+    return call_llm(prompt)
+
+
+def get_simplified_explanation_with_llm(paper: dict, paper_number: int) -> str:
+    """
+    Use LLM to generate a simplified (ELI5) explanation of a paper.
+    """
+    authors = ", ".join(paper["authors"])
+
+    prompt = f"""Você é um assistente de voz da Alexa especializado em explicar ciência de forma simples.
+Explique o seguinte artigo científico como se estivesse explicando para alguém que não tem nenhum conhecimento técnico.
+
+Título: {paper['title']}
+Autores: {authors}
+Resumo completo: {paper['summary']}
+
+REGRAS IMPORTANTES:
+- O texto será LIDO EM VOZ ALTA pela Alexa
+- Use no máximo 200 palavras
+- Explique como se fosse para uma criança de 10 anos ou alguém completamente leigo
+- Use analogias do dia a dia para explicar conceitos técnicos
+- Evite completamente jargão técnico, use palavras simples
+- Não use formatação como asteriscos ou marcadores
+- Comece dizendo "Imagine que..." ou "Pense assim..." ou algo que crie uma analogia fácil
+
+Gere uma explicação extremamente simples e acessível em português brasileiro."""
+
+    return call_llm(prompt)
+
+
+def get_key_findings_with_llm(paper: dict, paper_number: int) -> str:
+    """
+    Use LLM to extract key findings and contributions from a paper.
+    """
+    authors = ", ".join(paper["authors"])
+
+    prompt = f"""Você é um assistente de voz da Alexa especializado em inteligência artificial.
+Extraia e apresente as principais descobertas e contribuições do seguinte artigo científico.
+
+Título: {paper['title']}
+Autores: {authors}
+Resumo completo: {paper['summary']}
+
+REGRAS IMPORTANTES:
+- O texto será LIDO EM VOZ ALTA pela Alexa
+- Use no máximo 200 palavras
+- Foque nos resultados principais e nas contribuições mais importantes
+- Mencione métricas ou melhorias quantitativas se disponíveis
+- Explique por que essas descobertas são relevantes para a área
+- Use linguagem acessível, explicando termos técnicos
+- Não use formatação como asteriscos ou marcadores
+- Comece dizendo "As principais descobertas do artigo número {paper_number}..." ou similar
+
+Gere um resumo das descobertas chave em português brasileiro."""
+
+    return call_llm(prompt)
+
+
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
 
@@ -180,7 +295,9 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input: HandlerInput) -> Response:
         speak_output = (
             "Olá! Sou sua assistente de artigos do Hugging Face. "
-            "Diga resumir artigos para ouvir as novidades em inteligência artificial."
+            "Diga resumir artigos para ouvir as novidades em inteligência artificial. "
+            "Depois, você pode pedir detalhes, usos práticos, explicação simples, "
+            "descobertas ou comparar artigos."
         )
 
         return (
@@ -316,6 +433,234 @@ class GetPaperDetailsIntentHandler(AbstractRequestHandler):
         )
 
 
+class GetPracticalUsageIntentHandler(AbstractRequestHandler):
+    """Handler for getting practical usage ideas for a paper."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("GetPracticalUsageIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        logger.info("Getting practical usage ideas for a paper")
+
+        slots = handler_input.request_envelope.request.intent.slots
+        paper_number = None
+
+        if slots and "paperNumber" in slots and slots["paperNumber"].value:
+            paper_number = parse_paper_number(slots["paperNumber"].value)
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        papers = session_attr.get("papers", [])
+
+        if not papers:
+            speak_output = (
+                "Ainda não busquei os artigos. "
+                "Diga resumir artigos primeiro, e depois peça os usos práticos."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Diga resumir artigos para começar.")
+                    .response
+            )
+
+        if not paper_number or paper_number < 1 or paper_number > len(papers):
+            speak_output = (
+                f"Por favor, diga um número de 1 a {len(papers)}. "
+                f"Por exemplo, diga: usos práticos do artigo 1."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("De qual artigo você quer saber os usos práticos?")
+                    .response
+            )
+
+        paper = papers[paper_number - 1]
+        speak_output = get_practical_usage_with_llm(paper, paper_number)
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask("Quer saber os usos práticos de outro artigo?")
+                .response
+        )
+
+
+class ComparePapersIntentHandler(AbstractRequestHandler):
+    """Handler for comparing two papers."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("ComparePapersIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        logger.info("Comparing two papers")
+
+        slots = handler_input.request_envelope.request.intent.slots
+        first_number = None
+        second_number = None
+
+        if slots:
+            if "firstPaper" in slots and slots["firstPaper"].value:
+                first_number = parse_paper_number(slots["firstPaper"].value)
+            if "secondPaper" in slots and slots["secondPaper"].value:
+                second_number = parse_paper_number(slots["secondPaper"].value)
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        papers = session_attr.get("papers", [])
+
+        if not papers:
+            speak_output = (
+                "Ainda não busquei os artigos. "
+                "Diga resumir artigos primeiro, e depois peça para comparar."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Diga resumir artigos para começar.")
+                    .response
+            )
+
+        if (not first_number or not second_number or
+                first_number < 1 or first_number > len(papers) or
+                second_number < 1 or second_number > len(papers)):
+            speak_output = (
+                f"Por favor, diga dois números de 1 a {len(papers)}. "
+                f"Por exemplo, diga: comparar artigo 1 com artigo 2."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Quais dois artigos você quer comparar?")
+                    .response
+            )
+
+        if first_number == second_number:
+            speak_output = "Você precisa escolher dois artigos diferentes para comparar."
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Quais dois artigos você quer comparar?")
+                    .response
+            )
+
+        paper1 = papers[first_number - 1]
+        paper2 = papers[second_number - 1]
+        speak_output = compare_papers_with_llm(paper1, first_number, paper2, second_number)
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask("Quer comparar outros artigos?")
+                .response
+        )
+
+
+class GetSimplifiedExplanationIntentHandler(AbstractRequestHandler):
+    """Handler for getting a simplified (ELI5) explanation of a paper."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("GetSimplifiedExplanationIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        logger.info("Getting simplified explanation for a paper")
+
+        slots = handler_input.request_envelope.request.intent.slots
+        paper_number = None
+
+        if slots and "paperNumber" in slots and slots["paperNumber"].value:
+            paper_number = parse_paper_number(slots["paperNumber"].value)
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        papers = session_attr.get("papers", [])
+
+        if not papers:
+            speak_output = (
+                "Ainda não busquei os artigos. "
+                "Diga resumir artigos primeiro, e depois peça uma explicação simples."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Diga resumir artigos para começar.")
+                    .response
+            )
+
+        if not paper_number or paper_number < 1 or paper_number > len(papers):
+            speak_output = (
+                f"Por favor, diga um número de 1 a {len(papers)}. "
+                f"Por exemplo, diga: explica de forma simples o artigo 1."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Qual artigo você quer que eu explique de forma simples?")
+                    .response
+            )
+
+        paper = papers[paper_number - 1]
+        speak_output = get_simplified_explanation_with_llm(paper, paper_number)
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask("Quer uma explicação simples de outro artigo?")
+                .response
+        )
+
+
+class GetKeyFindingsIntentHandler(AbstractRequestHandler):
+    """Handler for getting key findings and contributions of a paper."""
+
+    def can_handle(self, handler_input: HandlerInput) -> bool:
+        return ask_utils.is_intent_name("GetKeyFindingsIntent")(handler_input)
+
+    def handle(self, handler_input: HandlerInput) -> Response:
+        logger.info("Getting key findings for a paper")
+
+        slots = handler_input.request_envelope.request.intent.slots
+        paper_number = None
+
+        if slots and "paperNumber" in slots and slots["paperNumber"].value:
+            paper_number = parse_paper_number(slots["paperNumber"].value)
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        papers = session_attr.get("papers", [])
+
+        if not papers:
+            speak_output = (
+                "Ainda não busquei os artigos. "
+                "Diga resumir artigos primeiro, e depois peça as descobertas."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("Diga resumir artigos para começar.")
+                    .response
+            )
+
+        if not paper_number or paper_number < 1 or paper_number > len(papers):
+            speak_output = (
+                f"Por favor, diga um número de 1 a {len(papers)}. "
+                f"Por exemplo, diga: descobertas do artigo 1."
+            )
+            return (
+                handler_input.response_builder
+                    .speak(speak_output)
+                    .ask("De qual artigo você quer saber as descobertas?")
+                    .response
+            )
+
+        paper = papers[paper_number - 1]
+        speak_output = get_key_findings_with_llm(paper, paper_number)
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask("Quer saber as descobertas de outro artigo?")
+                .response
+        )
+
+
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
 
@@ -326,8 +671,10 @@ class HelpIntentHandler(AbstractRequestHandler):
         speak_output = (
             "Eu resumo os artigos mais recentes de inteligência artificial do Hugging Face. "
             "Diga resumir artigos para ouvir as novidades. "
-            "Depois, você pode pedir detalhes sobre um artigo específico dizendo, "
-            "por exemplo, detalhes do artigo dois."
+            "Depois, você pode pedir detalhes, usos práticos, uma explicação simples, "
+            "ou as principais descobertas de um artigo. "
+            "Você também pode comparar dois artigos entre si. "
+            "Por exemplo, diga: usos práticos do artigo dois."
         )
 
         return (
@@ -362,7 +709,10 @@ class FallbackIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
     def handle(self, handler_input: HandlerInput) -> Response:
-        speak_output = "Não entendi. Diga resumir artigos ou quais são as novidades."
+        speak_output = (
+            "Não entendi. Diga resumir artigos para começar, "
+            "ou peça usos práticos, explicação simples, descobertas ou comparar artigos."
+        )
 
         return (
             handler_input.response_builder
@@ -406,6 +756,10 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(GetPapersSummaryIntentHandler())
 sb.add_request_handler(GetLatestNewsIntentHandler())
 sb.add_request_handler(GetPaperDetailsIntentHandler())
+sb.add_request_handler(GetPracticalUsageIntentHandler())
+sb.add_request_handler(ComparePapersIntentHandler())
+sb.add_request_handler(GetSimplifiedExplanationIntentHandler())
+sb.add_request_handler(GetKeyFindingsIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
