@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Alexa Skill: Hugging Face Papers Summary (Alexa-Hosted Version)
 Fetches latest ML papers from Hugging Face and summarizes in Brazilian Portuguese
@@ -92,9 +91,9 @@ def call_llm(prompt: str) -> str:
 
     try:
         payload = json.dumps({
-            "model": "gpt-4o",
+            "model": "gpt-5.2-2025-12-11",
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 1024,
+            "max_completion_tokens": 1024,
         }).encode("utf-8")
 
         req = urllib.request.Request(
@@ -132,7 +131,7 @@ Resuma os seguintes artigos científicos do Hugging Face de forma natural e conv
 
 REGRAS IMPORTANTES:
 - O resumo será LIDO EM VOZ ALTA pela Alexa
-- Use no máximo 150 palavras no total
+- Use no máximo 200 palavras no total
 - Use linguagem simples e acessível
 - Não use siglas sem explicar
 - Não use formatação como asteriscos ou marcadores
@@ -165,7 +164,7 @@ REGRAS IMPORTANTES:
 - Explique o que o artigo propõe e por que é importante
 - Use linguagem acessível, explicando termos técnicos
 - Não use formatação como asteriscos ou marcadores
-- Comece dizendo "O artigo número {paper_number}..." ou similar
+- Comece dizendo "O artigo número {paper_number} de titulo {paper['title']}..." ou similar
 
 Gere uma explicação detalhada e natural em português brasileiro."""
 
