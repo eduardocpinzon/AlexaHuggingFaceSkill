@@ -89,6 +89,113 @@
                         "o terceiro",
                         "o quarto"
                     ]
+                },
+                {
+                    "name": "GetPracticalUsageIntent",
+                    "slots": [
+                        {
+                            "name": "paperNumber",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "usos práticos do artigo {paperNumber}",
+                        "aplicações do artigo {paperNumber}",
+                        "como usar o artigo {paperNumber}",
+                        "para que serve o artigo {paperNumber}",
+                        "uso prático do artigo {paperNumber}",
+                        "aplicação prática do artigo {paperNumber}",
+                        "como aplicar o artigo {paperNumber}",
+                        "onde posso usar o artigo {paperNumber}",
+                        "utilidade do artigo {paperNumber}",
+                        "como posso usar o artigo {paperNumber}",
+                        "usos do artigo {paperNumber}",
+                        "exemplos de uso do artigo {paperNumber}",
+                        "ideias de uso do artigo {paperNumber}",
+                        "usos práticos do {paperNumber}",
+                        "aplicações do {paperNumber}",
+                        "como aplicar o {paperNumber}",
+                        "para que serve o {paperNumber}"
+                    ]
+                },
+                {
+                    "name": "ComparePapersIntent",
+                    "slots": [
+                        {
+                            "name": "firstPaper",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "secondPaper",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "comparar artigo {firstPaper} com artigo {secondPaper}",
+                        "comparar artigo {firstPaper} e artigo {secondPaper}",
+                        "comparar o {firstPaper} com o {secondPaper}",
+                        "compare artigo {firstPaper} com {secondPaper}",
+                        "compare o {firstPaper} e o {secondPaper}",
+                        "diferença entre artigo {firstPaper} e {secondPaper}",
+                        "diferenças entre o {firstPaper} e o {secondPaper}",
+                        "qual a diferença entre artigo {firstPaper} e artigo {secondPaper}",
+                        "artigo {firstPaper} versus artigo {secondPaper}",
+                        "{firstPaper} versus {secondPaper}",
+                        "comparar {firstPaper} com {secondPaper}",
+                        "comparar {firstPaper} e {secondPaper}"
+                    ]
+                },
+                {
+                    "name": "GetSimplifiedExplanationIntent",
+                    "slots": [
+                        {
+                            "name": "paperNumber",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "explica de forma simples o artigo {paperNumber}",
+                        "explicação simples do artigo {paperNumber}",
+                        "me explica fácil o artigo {paperNumber}",
+                        "simplifica o artigo {paperNumber}",
+                        "explica para leigo o artigo {paperNumber}",
+                        "resumo simples do artigo {paperNumber}",
+                        "explica como se eu fosse criança o artigo {paperNumber}",
+                        "explica de um jeito fácil o artigo {paperNumber}",
+                        "o que é o artigo {paperNumber} em palavras simples",
+                        "traduz para leigo o artigo {paperNumber}",
+                        "explica de forma simples o {paperNumber}",
+                        "explicação simples do {paperNumber}",
+                        "simplifica o {paperNumber}",
+                        "me explica fácil o {paperNumber}",
+                        "explica para leigo o {paperNumber}"
+                    ]
+                },
+                {
+                    "name": "GetKeyFindingsIntent",
+                    "slots": [
+                        {
+                            "name": "paperNumber",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "descobertas do artigo {paperNumber}",
+                        "principais descobertas do artigo {paperNumber}",
+                        "resultados do artigo {paperNumber}",
+                        "o que o artigo {paperNumber} descobriu",
+                        "contribuições do artigo {paperNumber}",
+                        "conclusões do artigo {paperNumber}",
+                        "achados do artigo {paperNumber}",
+                        "o que o artigo {paperNumber} encontrou",
+                        "principais resultados do artigo {paperNumber}",
+                        "o que concluiu o artigo {paperNumber}",
+                        "descobertas do {paperNumber}",
+                        "resultados do {paperNumber}",
+                        "contribuições do {paperNumber}",
+                        "conclusões do {paperNumber}",
+                        "principais descobertas do {paperNumber}"
+                    ]
                 }
             ],
             "types": []
